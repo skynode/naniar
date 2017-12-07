@@ -28,20 +28,16 @@
 #'
 #' @importFrom dplyr select
 #' @importFrom rlang quos
-add_n_miss <- function(data,
-                       ...,
-                       label = "n_miss",
-                       .parallel = nrow(data) > 10000){
-
+add_n_miss <- function(data, ..., label = "n_miss"){
   if( missing(...) ){
-    data[[paste0(label, "_all")]] <- count_row_na_cpp(data, .parallel )
-    } else {
-      quo_vars <- quos(...)
-      selected_data <- select(data, !!!quo_vars)
-      data[[paste0(label, "_vars")]] <- count_row_na_cpp(selected_data, .parallel)
-      }
-  data
+    data[[paste0(label, "_all")]] <- count_row_na_cpp(data)
+  } else {
+    quo_vars <- quos(...)
+    selected_data <- select(data, !!!quo_vars)
+    data[[paste0(label, "_vars")]] <- count_row_na_cpp(selected_data)
   }
+  data
+}
 
 #' Add column containing proportion of missing data values
 #'
@@ -85,17 +81,13 @@ add_n_miss <- function(data,
 #' prp(type = 4,
 #'     extra = 101,
 #'     prefix = "prop_miss = ")
-add_prop_miss <- function(data,
-                          ...,
-                          label = "prop_miss",
-                          .parallel = nrow(data) > 10000){
-
+add_prop_miss <- function(data, ..., label = "prop_miss" ){
   if( missing(...) ){
-    data[[paste0(label, "_all")]] <- prop_row_na_cpp(data, .parallel)
-    } else {
-      quo_vars <- quos(...)
-      selected_data <- select(data, !!!quo_vars)
-      data[[paste0(label, "_vars")]] <- prop_row_na_cpp(selected_data, .parallel)
-      }
-  data
+    data[[paste0(label, "_all")]] <- prop_row_na_cpp(data)
+  } else {
+    quo_vars <- quos(...)
+    selected_data <- select(data, !!!quo_vars)
+    data[[paste0(label, "_vars")]] <- prop_row_na_cpp(selected_data)
   }
+  data
+}
