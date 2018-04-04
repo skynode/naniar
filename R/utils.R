@@ -8,7 +8,7 @@ magrittr::`%>%`
 #'
 #' @param data data.frame, which will be grouped
 #' @param .fun a function to apply
-#' @param ... additionnal arguments to be passed to map
+#' @param ... additional arguments to be passed to map
 #'
 #' @return a dataframe with the function applied to each group
 #'
@@ -93,6 +93,20 @@ test_if_dataframe <- function(x){
   # test for dataframe
   if (!inherits(x, "data.frame")) {
     stop("Input must inherit from data.frame", call. = FALSE)
+    }
+}
+
+# are there any columns that contain a shadow column?
+any_shadow <- function(x){
+  any(grepl("_NA$",colnames(x)))
+}
+
+# # test if there are shadow columns?
+test_if_any_shadow <- function(x){
+  # test for dataframe
+  test_if_dataframe(x)
+  if (!any_shadow(x)) {
+    stop("Input must contain a shadow column ending in _NA", call. = FALSE)
     }
 }
 
